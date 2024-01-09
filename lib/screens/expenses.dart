@@ -64,8 +64,14 @@ class _ExpensesState extends State<Expenses> {
     ));
   }
 
+  bool isPortrait(Orientation orientation) {
+    return orientation == Orientation.portrait;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -87,16 +93,31 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(
-            expenses: _registeredExpenses,
-          ),
-          Expanded(
-            child: mainContent,
-          )
-        ],
-      ),
+      body: isPortrait(orientation)
+          ? Column(
+              children: [
+                Chart(
+                  expenses: _registeredExpenses,
+                ),
+                Expanded(
+                  child: mainContent,
+                )
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Chart(
+                    expenses: _registeredExpenses,
+                  ),
+                ),
+                Expanded(
+                  child: mainContent,
+                )
+              ],
+            ),
     );
   }
 }
